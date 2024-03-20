@@ -8,11 +8,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { feedbackSchema } from '../../validations/feedbackSchema'
 import { FeedbackTypeInput } from './FeedbackTypeInput'
 import { ScreenshotButton } from './ScreenshotButton'
+import { api } from '../../lib/axios'
 
 interface FastFeedbackWidgetProps {
   children: ReactNode
   side?: 'bottom' | 'left' | 'right' | 'top'
   className?: string
+  projectId: string
 }
 
 type FeedbackFormValues = z.infer<typeof feedbackSchema>
@@ -21,6 +23,8 @@ export function FastFeedbackWidget({
   children,
   side = 'left',
   className,
+
+  projectId,
 }: FastFeedbackWidgetProps) {
   const form = useForm<FeedbackFormValues>({
     resolver: zodResolver(feedbackSchema),
@@ -41,10 +45,22 @@ export function FastFeedbackWidget({
     control: form.control,
   })
 
-  function handleSubmitForm(data: FeedbackFormValues) {
-    console.log({ ...data, page: window.location.href })
+  async function handleSubmitForm(data: FeedbackFormValues) {
+    try {
+      await api.post('/feedback/public', {
+        ...data,
+        projectId,
+        pageUrl: window.location.href,
+      })
+    } catch (error) {
+      console.log(error)
+    } finally {
+      form.reset()
+    }
+  }
 
-    form.reset()
+  if (!projectId) {
+    throw new Error('Project Id is required')
   }
 
   return (
