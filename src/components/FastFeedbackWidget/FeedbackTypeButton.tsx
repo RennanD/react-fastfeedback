@@ -13,6 +13,7 @@ export function FeedbackTypeButton({
 }: FeedbackTypeButtonProps) {
   return (
     <button
+      type="button"
       className={tw(
         'px-3 py-1 rounded border border-gray-200 text-gray-900 text-sm',
         { 'bg-cyan-100': isActive },
