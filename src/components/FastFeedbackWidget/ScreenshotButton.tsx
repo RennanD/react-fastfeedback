@@ -1,14 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import html2canvas from 'html2canvas'
 import { CameraIcon } from '../CamaraIcon'
 import { TrashIcon } from '../TrashIcon'
 
 interface ScreenshotButtonProps {
   onCapture: (image: string) => void
+  defaultImage?: string
 }
 
-export function ScreenshotButton({ onCapture }: ScreenshotButtonProps) {
-  const [screenshotImage, setScreenShotImage] = useState<string | null>(null)
+export function ScreenshotButton({
+  onCapture,
+  defaultImage,
+}: ScreenshotButtonProps) {
+  const [screenshotImage, setScreenShotImage] = useState<string | undefined>(
+    undefined,
+  )
 
   async function handleTakeScreenshot() {
     const canvas = await html2canvas(document.querySelector('html')!)
@@ -17,6 +23,10 @@ export function ScreenshotButton({ onCapture }: ScreenshotButtonProps) {
     setScreenShotImage(base64Image)
     onCapture(base64Image)
   }
+
+  useEffect(() => {
+    setScreenShotImage(defaultImage)
+  }, [defaultImage])
 
   return (
     <>

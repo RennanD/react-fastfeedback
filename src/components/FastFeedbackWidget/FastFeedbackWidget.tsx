@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, useState } from 'react'
 
 import * as Popover from '@radix-ui/react-popover'
 import { tw } from '../../utils/tw'
@@ -9,6 +9,7 @@ import { feedbackSchema } from '../../validations/feedbackSchema'
 import { FeedbackTypeInput } from './FeedbackTypeInput'
 import { ScreenshotButton } from './ScreenshotButton'
 import { api } from '../../lib/axios'
+import { CheckIcon } from '../CheckIcon/CheckIcon'
 
 interface FastFeedbackWidgetProps {
   children: ReactNode
@@ -26,11 +27,14 @@ export function FastFeedbackWidget({
 
   projectId,
 }: FastFeedbackWidgetProps) {
+  const [submitedForm, setSubmitedForm] = useState(false)
+
   const form = useForm<FeedbackFormValues>({
     resolver: zodResolver(feedbackSchema),
     defaultValues: {
       description: '',
       screenshot: '',
+      type: undefined,
     },
   })
 
@@ -56,6 +60,11 @@ export function FastFeedbackWidget({
       console.log(error)
     } finally {
       form.reset()
+      setSubmitedForm(true)
+
+      setTimeout(() => {
+        setSubmitedForm(false)
+      }, 2000)
     }
   }
 
@@ -118,9 +127,19 @@ export function FastFeedbackWidget({
             </button>
 
             <ScreenshotButton
+              defaultImage={screenshotField.value}
               onCapture={(image) => screenshotField.onChange(image)}
             />
           </div>
+
+          {submitedForm && (
+            <div className="flex items-center gap-2">
+              <CheckIcon />
+              <span className="text-xs text-emerald-500">
+                Feedback enviado com sucesso
+              </span>
+            </div>
+          )}
         </form>
       </Popover.Content>
     </Popover.Root>

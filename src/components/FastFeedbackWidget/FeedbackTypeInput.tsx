@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FeedbackTypeButton } from './FeedbackTypeButton'
 
 interface FeedbackTypeInputProps {
@@ -10,12 +10,18 @@ export function FeedbackTypeInput({
   onChange,
   value = '',
 }: FeedbackTypeInputProps) {
-  const [feedbackTypeSelected, setFeedbackTypeSelected] = useState(value)
+  const [feedbackTypeSelected, setFeedbackTypeSelected] = useState<
+    string | undefined
+  >(undefined)
 
-  function handleSelectFeedbackType(value: string) {
-    setFeedbackTypeSelected(value)
-    onChange(value)
+  function handleSelectFeedbackType(type: string) {
+    setFeedbackTypeSelected(type)
+    onChange(type)
   }
+
+  useEffect(() => {
+    setFeedbackTypeSelected(value)
+  }, [value])
 
   return (
     <ul className="flex flex-wrap gap-2 items-center">
