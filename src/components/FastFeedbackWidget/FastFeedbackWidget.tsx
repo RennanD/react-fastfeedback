@@ -10,6 +10,8 @@ import { FeedbackTypeInput } from './FeedbackTypeInput'
 import { ScreenshotButton } from './ScreenshotButton'
 import { api } from '../../lib/axios'
 import { CheckIcon } from '../CheckIcon/CheckIcon'
+import { detectOS } from '../../utils/detectOS'
+import { detectBrowser } from '../../utils/detectBrowser'
 
 interface FastFeedbackWidgetProps {
   children: ReactNode
@@ -51,8 +53,14 @@ export function FastFeedbackWidget({
 
   async function handleSubmitForm(data: FeedbackFormValues) {
     try {
+      const userOs = detectOS()
+      const userBrowser = detectBrowser()
+
+      const device = `${userBrowser} | ${userOs} `
+
       await api.post('/feedback/public', {
         ...data,
+        device,
         projectId,
         pageUrl: window.location.href,
       })
