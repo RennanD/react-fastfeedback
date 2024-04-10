@@ -22,6 +22,8 @@ interface FastFeedbackWidgetProps {
 
 type FeedbackFormValues = z.infer<typeof feedbackSchema>
 
+type SubmitedFormStatus = 'waiting' | 'successed' | 'errored'
+
 export function FastFeedbackWidget({
   children,
   side = 'left',
@@ -29,7 +31,8 @@ export function FastFeedbackWidget({
 
   projectId,
 }: FastFeedbackWidgetProps) {
-  const [submitedForm, setSubmitedForm] = useState(false)
+  const [submitedFormStatus, setSubmitedFormStatus] =
+    useState<SubmitedFormStatus>('waiting')
 
   const form = useForm<FeedbackFormValues>({
     resolver: zodResolver(feedbackSchema),
@@ -64,14 +67,18 @@ export function FastFeedbackWidget({
         projectId,
         pageUrl: window.location.href,
       })
-    } catch (error) {
-      console.log(error)
-    } finally {
       form.reset()
-      setSubmitedForm(true)
+      setSubmitedFormStatus('successed')
 
       setTimeout(() => {
-        setSubmitedForm(false)
+        setSubmitedFormStatus('waiting')
+      }, 2000)
+    } catch (error) {
+      console.log(error)
+      setSubmitedFormStatus('errored')
+
+      setTimeout(() => {
+        setSubmitedFormStatus('waiting')
       }, 2000)
     }
   }
@@ -87,15 +94,15 @@ export function FastFeedbackWidget({
         <form
           onSubmit={form.handleSubmit(handleSubmitForm)}
           className={tw(
-            'rounded-[5px] flex flex-col gap-4 shadow-sm p-5 max-w-xs w-full bg-white will-change-[transform,opacity] data-[state=open]:data-[side=top]:animate-slideDownAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade',
+            'rounded-[5px] flex flex-col gap-4 shadow-sm p-5 max-w-xs w-full bg-card will-change-[transform,opacity] data-[state=open]:data-[side=top]:animate-slideDownAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade',
             className,
           )}
         >
           <div>
-            <h3 className="text-gray-900 text-xl font-bold">
+            <h3 className="text-foreground text-xl font-bold">
               O que está na sua mente?
             </h3>
-            <p className="text-gray-600 text-sm mt-1">
+            <p className="text-muted-foreground text-sm mt-1">
               Descreva seu feedback para que possamos ajudar da melhor forma
               possível! 🙂
             </p>
@@ -116,7 +123,7 @@ export function FastFeedbackWidget({
           <div className="space-y-px">
             <textarea
               placeholder="Escreva seu feedback..."
-              className="resize-none text-sm placeholder:text-gray-200 p-2 text-gray-900 h-20 rounded border-gray-300 w-full border"
+              className="resize-none text-sm placeholder:text-muted-foreground p-2 text-foreground h-20 rounded border-gray-300 w-full border"
               {...form.register('description')}
             ></textarea>
             {errors.description && (
@@ -129,7 +136,7 @@ export function FastFeedbackWidget({
           <div className="flex gap-2 items-center">
             <button
               type="submit"
-              className="w-full flex items-center h-8 justify-center px-4 py-2 rounded text-sm font-bold bg-cyan-500 text-white hover:bg-cyan-700 transition-colors"
+              className="w-full flex items-center h-8 justify-center px-4 py-2 rounded text-sm font-bold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
             >
               {isSubmitting ? 'Enviando...' : 'Enviar feedback'}
             </button>
@@ -140,11 +147,19 @@ export function FastFeedbackWidget({
             />
           </div>
 
-          {submitedForm && (
+          {submitedFormStatus === 'successed' && (
             <div className="flex items-center gap-2">
               <CheckIcon />
               <span className="text-xs text-emerald-500">
                 Feedback enviado com sucesso
+              </span>
+            </div>
+          )}
+
+          {submitedFormStatus === 'errored' && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-red-500">
+                Não foi possível enivar o feedback
               </span>
             </div>
           )}
