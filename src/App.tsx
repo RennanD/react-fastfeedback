@@ -6,7 +6,7 @@ export function App() {
       <h1>hello</h1>
 
       <FastFeedbackWidget
-        projectId="19640f0a-b5fa-498b-b287-cbc9f47156d2"
+        projectId="f73011fd-8c04-4470-8708-b0de4e885a51"
         className="mr-2"
       >
         <button className="fixed right-0 top-1/2 z-40 flex flex-col items-center justify-center gap-2 rounded-bl-[10px] rounded-tl-[10px] bg-primary px-0 py-4 lg:px-2">

@@ -12,12 +12,14 @@ import { api } from '../../lib/axios'
 import { CheckIcon } from '../CheckIcon/CheckIcon'
 import { detectOS } from '../../utils/detectOS'
 import { detectBrowser } from '../../utils/detectBrowser'
+import { LOCALES } from '../../utils/locales'
 
 interface FastFeedbackWidgetProps {
   children: ReactNode
   side?: 'bottom' | 'left' | 'right' | 'top'
   className?: string
   projectId: string
+  language?: 'en' | 'es' | 'pt-br' | 'fr' | 'de' | 'pt-pt'
 }
 
 type FeedbackFormValues = z.infer<typeof feedbackSchema>
@@ -28,9 +30,17 @@ export function FastFeedbackWidget({
   children,
   side = 'left',
   className,
-
+  language = 'en',
   projectId,
 }: FastFeedbackWidgetProps) {
+  const {
+    headline,
+    description,
+    placeholer,
+    button,
+    errors: localeErrors,
+  } = LOCALES[language]
+
   const [submitedFormStatus, setSubmitedFormStatus] =
     useState<SubmitedFormStatus>('waiting')
 
@@ -99,36 +109,32 @@ export function FastFeedbackWidget({
           )}
         >
           <div>
-            <h3 className="text-foreground text-xl font-bold">
-              O que está na sua mente?
-            </h3>
-            <p className="text-muted-foreground text-sm mt-1">
-              Descreva seu feedback para que possamos ajudar da melhor forma
-              possível! 🙂
-            </p>
+            <h3 className="text-foreground text-xl font-bold">{headline}</h3>
+            <p className="text-muted-foreground text-sm mt-1">{description}</p>
           </div>
 
           <div className="space-y-px">
             <FeedbackTypeInput
+              language={language}
               value={typeField.value}
               onChange={(value) => typeField.onChange(value)}
             />
             {errors.type && (
               <span className="text-xs text-red-400">
-                {errors.type.message}
+                {localeErrors.feedbackType}
               </span>
             )}
           </div>
 
           <div className="space-y-px">
             <textarea
-              placeholder="Escreva seu feedback..."
+              placeholder={placeholer}
               className="resize-none text-sm placeholder:text-muted-foreground p-2 text-foreground h-20 rounded border-gray-300 w-full border"
               {...form.register('description')}
             ></textarea>
             {errors.description && (
               <span className="text-xs text-red-400">
-                {errors.description.message}
+                {localeErrors.feedbackText}
               </span>
             )}
           </div>
@@ -138,7 +144,7 @@ export function FastFeedbackWidget({
               type="submit"
               className="w-full flex items-center h-8 justify-center px-4 py-2 rounded text-sm font-bold bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
             >
-              {isSubmitting ? 'Enviando...' : 'Enviar feedback'}
+              {isSubmitting ? button.loading : button.default}
             </button>
 
             <ScreenshotButton

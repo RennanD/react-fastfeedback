@@ -1,18 +1,25 @@
 import { useEffect, useState } from 'react'
 import { FeedbackTypeButton } from './FeedbackTypeButton'
+import { LOCALES } from '../../utils/locales'
 
 interface FeedbackTypeInputProps {
   onChange: (value: string) => void
   value?: string
+  language: 'en' | 'es' | 'pt-br' | 'fr' | 'de' | 'pt-pt'
 }
 
 export function FeedbackTypeInput({
   onChange,
   value = '',
+  language,
 }: FeedbackTypeInputProps) {
   const [feedbackTypeSelected, setFeedbackTypeSelected] = useState<
     string | undefined
   >(undefined)
+
+  const { options } = LOCALES[language]
+
+  const [bug, idea, other] = options
 
   function handleSelectFeedbackType(type: string) {
     setFeedbackTypeSelected(type)
@@ -27,21 +34,21 @@ export function FeedbackTypeInput({
     <ul className="flex flex-wrap gap-2 items-center">
       <li>
         <FeedbackTypeButton
-          label="Problemas"
+          label={bug}
           onClick={() => handleSelectFeedbackType('bug')}
           isActive={feedbackTypeSelected === 'bug'}
         />
       </li>
       <li>
         <FeedbackTypeButton
-          label="Ideias"
+          label={idea}
           onClick={() => handleSelectFeedbackType('idea')}
           isActive={feedbackTypeSelected === 'idea'}
         />
       </li>
       <li>
         <FeedbackTypeButton
-          label="Outro"
+          label={other}
           onClick={() => handleSelectFeedbackType('other')}
           isActive={feedbackTypeSelected === 'other'}
         />

@@ -34,7 +34,7 @@ export function ScreenshotButton({
         <button
           type="button"
           onClick={handleTakeScreenshot}
-          className="h-8 w-10 flex items-center justify-center text-sm border-border border rounded hover:bg-primary/5 transition-colors"
+          className="h-8 w-10 flex items-center justify-center text-sm border-border border rounded hover:border-primary transition-colors"
         >
           <CameraIcon />
         </button>
