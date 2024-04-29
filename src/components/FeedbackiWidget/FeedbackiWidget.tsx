@@ -7,32 +7,36 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { feedbackSchema } from '../../validations/feedbackSchema'
 import { FeedbackTypeInput } from './FeedbackTypeInput'
-import { ScreenshotButton } from './ScreenshotButton'
+// import { ScreenshotButton } from './ScreenshotButton'
 import { api } from '../../lib/axios'
 import { CheckIcon } from '../CheckIcon/CheckIcon'
 import { detectOS } from '../../utils/detectOS'
 import { detectBrowser } from '../../utils/detectBrowser'
 import { LOCALES } from '../../utils/locales'
 
-interface FastFeedbackWidgetProps {
+const LANGS = ['en', 'es', 'pt-br', 'fr', 'de', 'pt-pt'] as const
+
+type LangsTypes = (typeof LANGS)[number]
+
+export interface FeedbackiWidgetProps {
   children: ReactNode
   side?: 'bottom' | 'left' | 'right' | 'top'
   className?: string
   projectId: string
-  language?: 'en' | 'es' | 'pt-br' | 'fr' | 'de' | 'pt-pt'
+  language?: LangsTypes
 }
 
 type FeedbackFormValues = z.infer<typeof feedbackSchema>
 
 type SubmitedFormStatus = 'waiting' | 'successed' | 'errored'
 
-export function FastFeedbackWidget({
+export function FeedbackiWidget({
   children,
   side = 'left',
   className,
   language = 'en',
   projectId,
-}: FastFeedbackWidgetProps) {
+}: FeedbackiWidgetProps) {
   const {
     headline,
     description,
@@ -59,10 +63,10 @@ export function FastFeedbackWidget({
     name: 'type',
     control: form.control,
   })
-  const { field: screenshotField } = useController({
-    name: 'screenshot',
-    control: form.control,
-  })
+  // const { field: screenshotField } = useController({
+  //   name: 'screenshot',
+  //   control: form.control,
+  // })
 
   async function handleSubmitForm(data: FeedbackFormValues) {
     try {
@@ -104,7 +108,7 @@ export function FastFeedbackWidget({
         <form
           onSubmit={form.handleSubmit(handleSubmitForm)}
           className={tw(
-            'rounded-[5px] flex flex-col gap-4 shadow-sm p-5 max-w-xs w-full bg-card will-change-[transform,opacity] data-[state=open]:data-[side=top]:animate-slideDownAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade',
+            'rounded-[5px] border border-border overflow-hidden flex flex-col ha gap-4 shadow-lg p-5 max-w-xs w-full bg-card will-change-[transform,opacity] data-[state=open]:data-[side=top]:animate-slideDownAndFade data-[state=open]:data-[side=right]:animate-slideLeftAndFade data-[state=open]:data-[side=bottom]:animate-slideUpAndFade data-[state=open]:data-[side=left]:animate-slideRightAndFade',
             className,
           )}
         >
@@ -147,10 +151,10 @@ export function FastFeedbackWidget({
               {isSubmitting ? button.loading : button.default}
             </button>
 
-            <ScreenshotButton
+            {/* <ScreenshotButton
               defaultImage={screenshotField.value}
               onCapture={(image) => screenshotField.onChange(image)}
-            />
+            /> */}
           </div>
 
           {submitedFormStatus === 'successed' && (

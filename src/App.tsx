@@ -1,11 +1,11 @@
-import { FastFeedbackWidget } from './components/FastFeedbackWidget'
+import { FeedbackiWidget } from './components/FeedbackiWidget'
 
 export function App() {
   return (
-    <div className="h-screen relative bg-gray-900 text-gray-100">
+    <div className="h-screen relative bg-white">
       <h1>hello</h1>
 
-      <FastFeedbackWidget
+      <FeedbackiWidget
         projectId="f73011fd-8c04-4470-8708-b0de4e885a51"
         className="mr-2"
       >
@@ -17,7 +17,7 @@ export function App() {
             Feedback
           </p>
         </button>
-      </FastFeedbackWidget>
+      </FeedbackiWidget>
     </div>
   )
 }
