@@ -42,6 +42,7 @@ export function FeedbackiWidget({
     description,
     placeholer,
     button,
+    status,
     errors: localeErrors,
   } = LOCALES[language]
 
@@ -161,16 +162,14 @@ export function FeedbackiWidget({
             <div className="flex items-center gap-2">
               <CheckIcon />
               <span className="text-xs text-emerald-500">
-                Feedback enviado com sucesso
+                {status.successed}
               </span>
             </div>
           )}
 
           {submitedFormStatus === 'errored' && (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-red-500">
-                Não foi possível enivar o feedback
-              </span>
+              <span className="text-xs text-red-500">{status.errored}</span>
             </div>
           )}
         </form>

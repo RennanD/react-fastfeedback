@@ -13,6 +13,10 @@ export const LOCALES = {
       default: 'Send feedback',
       loading: 'Sending...',
     },
+    status: {
+      successed: 'Feedback sent successfully',
+      errored: 'Unable to send feedback',
+    },
   },
   es: {
     headline: '¿Qué tienes en mente?',
@@ -27,6 +31,10 @@ export const LOCALES = {
     button: {
       default: 'Enviar feedback',
       loading: 'Enviando...',
+    },
+    status: {
+      successed: 'Feedback enviado correctamente',
+      errored: 'No es posible recibir Feedback',
     },
   },
   'pt-br': {
@@ -43,6 +51,10 @@ export const LOCALES = {
       default: 'Enviar feedback',
       loading: 'Enviando...',
     },
+    status: {
+      successed: 'Feedback enviado com sucesso',
+      errored: 'Não foi possível enivar o feedback',
+    },
   },
   fr: {
     headline: "Qu'est-ce qui préoccupe votre esprit?",
@@ -57,6 +69,10 @@ export const LOCALES = {
     button: {
       default: 'Envoyer des commentaires',
       loading: 'En cours de livraison...',
+    },
+    status: {
+      successed: 'Commentaires envoyés avec succès',
+      errored: "Impossible d'envoyer des commentaires",
     },
   },
   de: {
@@ -73,6 +89,10 @@ export const LOCALES = {
       default: 'Feedback abschicken',
       loading: 'Senden...',
     },
+    status: {
+      successed: 'Feedback erfolgreich gesendet',
+      errored: 'Feedback kann nicht gesendet werden',
+    },
   },
   'pt-pt': {
     headline: 'O que está na sua mente?',
@@ -87,6 +107,10 @@ export const LOCALES = {
     button: {
       default: 'Enviar feedback',
       loading: 'Enviando...',
+    },
+    status: {
+      successed: 'Feedback enviado com sucesso',
+      errored: 'Não foi possível enivar o feedback',
     },
   },
 }
